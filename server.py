@@ -1,6 +1,7 @@
 import socket 
 import threading
 import time
+import json
 
 HEADER = 64 # 1st massage to the server size
 PORT = 5050
@@ -19,6 +20,7 @@ def handle_client(conn, addr):
 
     connected = True
     while connected:
+        # reciving messange
         msg_length = conn.recv(HEADER).decode(FORMAT) # "blocking"
         if msg_length:
             msg_length = int(msg_length)
@@ -26,6 +28,27 @@ def handle_client(conn, addr):
             if msg == DISCONNECT_MESSAGE:
                 connected = False
             print(f"[{addr}] {msg}")
+
+        # sending text message
+        msg = {
+            "3-bit": {
+                "count": 2,
+                "bbox": [
+                    {"no": 0, "x": 255, "y": 355},
+                    {"no": 1, "x": -33, "y": 0}
+                ]
+            },
+
+            "snickers": {
+                "count": 1,
+                "bbox": [
+                    {"no": 0, "x": 255, "y": 355},
+                ]
+            }
+        }
+        send_msg = json.dumps(msg).encode()
+        conn.send(send_msg)
+
 
     conn.close()
 

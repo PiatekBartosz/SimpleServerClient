@@ -1,4 +1,5 @@
 import socket
+import json
 
 # todo send json files
 HEADER = 64
@@ -20,5 +21,10 @@ def send(msg):
     client.send(send_len)
     client.send(message)
 
+def recv():
+    return client.recv(1024)
+
+
 send("test message")
+print(recv().decode(FORMAT))
 send(DISCONNECT_MESSAGE)
